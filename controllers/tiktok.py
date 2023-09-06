@@ -50,6 +50,7 @@ class TiktokController(http.Controller):
             if not tikok_user:
                 tikok_user = request.env['tiktok.user'].sudo().create({
                     'open_id':user_info_decode['open_id'],
+                    'access_token': token,
                     'union_id':user_info_decode['union_id'],
                     'profile_img':user_info_decode['avatar_url'],
                     'username':user_info_decode['display_name'],
@@ -57,6 +58,7 @@ class TiktokController(http.Controller):
                 })
             else:
                 tikok_user.write({
+                    'access_token': token,
                     'profile_img': user_info_decode['avatar_url'],
                     'username': user_info_decode['display_name'],
                     'admin': request.env.user.id

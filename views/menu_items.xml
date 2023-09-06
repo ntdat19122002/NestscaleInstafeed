@@ -1,3 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <data/>
+    <data>
+        <menuitem id="instafeed_root"
+                  name="Instafeed"
+                  sequence="20"/>
+
+        <menuitem id="menu_bundle_dashboard"
+            name="Dashboard"
+            sequence="1"
+            parent="instafeed_root"/>
+
+        <menuitem id="shopify_shop_menu"
+            name="Shopify shop"
+            parent="instafeed_root"
+            sequence="2"
+            action="shopify_shop_action"/>
+
+        <menuitem id="media_source_menu"
+            name="Media source"
+            parent="instafeed_root"
+            sequence="2"
+            action="media_source_action"/>
+    </data>
 </odoo>
