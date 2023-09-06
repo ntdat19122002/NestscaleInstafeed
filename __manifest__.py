@@ -9,9 +9,11 @@
     'depends': ['sale'],
     'data': [
         'security/ir.model.access.csv',
+        'views/views.xml',
+        'views/menu_items.xml',
         'views/config_setting.xml',
         'views/templates.xml',
-        'data/cron_job.xml',
+        # 'data/cron_job.xml',
         'views/app.xml',
         'views/shopify_shop.xml',
         'views/media_source.xml',

@@ -18,7 +18,7 @@ class CustomerPortal(CustomerPortal):
     def home(self):
         # Todo: Check nhóm người dùng. Nếu là admin thì redirect về '/web' 👌
         # Reply: Trong odoo, admin sau khi đăng nhập đã được tự động trả về web
-        if request.env.user.has_group('base.group_erp_manager'):
+        if request.env.user.has_group('base.group_user'):
             return werkzeug.utils.redirect('/web')
         return werkzeug.utils.redirect('/apps/instafeed')
 
