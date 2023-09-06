@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <!--        TODO: Action-->
+        <record id="shopify_shop_action" model="ir.actions.act_window">
+            <field name="name">Shop</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shopify.shop</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+<!--        TODO: Menu-->
+        <menuitem id="shopify_shop_menu"
+            name="Shopify shop"
+            parent="instafeed_root"
+            sequence="2"
+            action="shopify_shop_action"/>
+    </data>
+</odoo>

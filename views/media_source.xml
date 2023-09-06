@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <!--        TODO: Action-->
+        <record id="media_source_action" model="ir.actions.act_window">
+            <field name="name">Shop</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">media.source</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+<!--        TODO: Menu-->
+        <menuitem id="media_source_menu"
+            name="Media source"
+            parent="instafeed_root"
+            sequence="2"
+            action="media_source_action"/>
+    </data>
+</odoo>
