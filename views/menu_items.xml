@@ -13,13 +13,21 @@
         <menuitem id="shopify_shop_menu"
             name="Shopify shop"
             parent="instafeed_root"
-            sequence="2"
             action="shopify_shop_action"/>
 
         <menuitem id="media_source_menu"
             name="Media source"
             parent="instafeed_root"
-            sequence="2"
             action="media_source_action"/>
+
+        <menuitem id="tiktok_user_menu"
+            name="Tiktok user"
+            parent="instafeed_root"
+            action="tiktok_user_action"/>
+
+        <menuitem id="instagram_user_menu"
+            name="Instagram user"
+            parent="instafeed_root"
+            action="instagram_user_action"/>
     </data>
 </odoo>

@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access.shopify.shop,access_shopify_shop,instafeed.model_shopify_shop,,1,1,1,1
 access.media.source,access_media_source,instafeed.model_media_source,,1,1,1,1
+access.tiktok.user,access_tiktok_user,instafeed.model_tiktok_user,,1,1,1,1
+access.instagram.user,access_instagram_user,instafeed.model_instagram_user,,1,1,1,1
