@@ -25,7 +25,7 @@
         <record id="instagram_user_action" model="ir.actions.act_window">
             <field name="name">Instagram</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">tiktok.user</field>
+            <field name="res_model">instagram.user</field>
             <field name="view_mode">tree,form</field>
         </record>
 
