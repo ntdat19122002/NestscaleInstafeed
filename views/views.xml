@@ -15,20 +15,6 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <record id="tiktok_user_action" model="ir.actions.act_window">
-            <field name="name">Tiktok</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">tiktok.user</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-
-        <record id="instagram_user_action" model="ir.actions.act_window">
-            <field name="name">Instagram</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">tiktok.user</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-
         <record id="res_config_settings_view_instafeed_form" model="ir.ui.view">
             <field name="name">res.config.settings.view.form.instafeed</field>
             <field name="model">res.config.settings</field>

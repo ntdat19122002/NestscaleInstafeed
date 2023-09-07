@@ -19,15 +19,5 @@
             name="Media source"
             parent="instafeed_root"
             action="media_source_action"/>
-
-        <menuitem id="tiktok_user_menu"
-            name="Tiktok user"
-            parent="instafeed_root"
-            action="tiktok_user_action"/>
-
-        <menuitem id="instagram_user_menu"
-            name="Instagram user"
-            parent="instafeed_root"
-            action="instagram_user_action"/>
     </data>
 </odoo>
