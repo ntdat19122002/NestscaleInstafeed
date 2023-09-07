@@ -1,7 +1,6 @@
 <template>
   <div class="feed-shopify">
     Hello, this is feed shopify
-    {{ feed_id}}
     <FeedComponent :posts="posts" :feed_setting="feed_setting"/>
   </div>
 </template>

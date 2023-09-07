@@ -1,6 +1,26 @@
+*.mp4
+
+# Environment Configuration
+.env
+.env.*
+
+# Dependency directory
 node_modules
 
-package-lock.json
+# Test coverage directory
+coverage
 
-bundle.mp4
-*.mp4
+# Ignore Apple macOS Desktop Services Store
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# extensions build output
+extensions/*/build
+
+# lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
