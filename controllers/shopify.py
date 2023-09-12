@@ -9,6 +9,7 @@ from odoo.http import request
 class ShopifyController(http.Controller):
     @http.route('/shopify/products', type="json", auth='public', cors='*', method=['POST'])
     def get_products_shopify(self, **kw):
+        # Todo: Sửa lại tìm kiếm sản phẩm theo shop. Hiện nay đang search ra nhiều shop
         shop = request.env['shopify.shop'].sudo().search([('user_id','=',request.env.user.id)])
         shop.init_shopify_session()
         if not kw['product_search']:
@@ -85,6 +86,7 @@ class ShopifyController(http.Controller):
             })
         return json.dumps(shops_data)
 
+    # Todo: Bỏ feature này. Muốn integration thì phải thông qua hàm authorize
     @http.route('/api/integrate', type='json', auth='user', cors='*', method=['POST'])
     def integrate_shop(self, **kw):
         shop = request.env['shopify.shop'].sudo().search([('shop_url', '=', kw['url'])])
@@ -96,6 +98,7 @@ class ShopifyController(http.Controller):
                     }
                 )
 
+    # Todo: Bỏ feature này. Muốn biết chi tiết thì hỏi anh Hải
     @http.route('/api/disintegrate', type='json', auth='user', cors='*', method=['POST'])
     def disintegrate_shop(self, **kw):
         shop = request.env['shopify.shop'].sudo().search([('shop_url', '=', kw['url'])])

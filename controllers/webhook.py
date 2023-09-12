@@ -18,6 +18,7 @@ class WebhookController(http.Controller):
         print(request.jsonrequest)
         return {}
 
+    #Todo: Viết webhook cập nhật tên sản phẩm.
     @http.route('/webhook/products_update/<int:id>',type='json', auth="public")
     def webhook_check(self,**kw):
         print(request.jsonrequest)

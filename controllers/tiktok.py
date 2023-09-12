@@ -26,6 +26,7 @@ class TiktokController(http.Controller):
         return werkzeug.utils.redirect(url+urlencode(params))
 
     @http.route('/tiktok/instafeed/finalize', auth='public')
+    #Todo: Thêm try catch
     def tiktok_finalize(self,**kw):
         tiktok_client_key = request.env['ir.config_parameter'].sudo().get_param('instafeed.tiktok_client_key')
         tiktok_secret_key = request.env['ir.config_parameter'].sudo().get_param('instafeed.tiktok_secret_key')
@@ -94,6 +95,7 @@ class TiktokController(http.Controller):
                         })
         return werkzeug.utils.redirect('https://odoo.website/')
 
+    #Todo: Bỏ. Code thừa
     @http.route('/tiktok/like', type="json", auth='public', cors='*', method=['POST'])
     def get_number_of_like_tiktok(self, **kw):
         post = request.env['tiktok.post'].sudo().search([('id', '=', kw['post_id'])])

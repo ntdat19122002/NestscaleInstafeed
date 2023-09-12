@@ -1,0 +1,19 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "Instafeed"
+client_id = "eb6a0dbdbd44199f05897749f434126b"
+application_url = "https://odoo.website/shopify/instafeed/auth"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+use_legacy_install_flow = true
+
+[auth]
+redirect_urls = [ "https://odoo.website/shopify/instafeed/finalize" ]
+
+[webhooks]
+api_version = "2023-07"
+
+[pos]
+embedded = false

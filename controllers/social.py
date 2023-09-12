@@ -5,13 +5,11 @@ from odoo import http
 from odoo.http import request
 
 class SocialController(http.Controller):
-    @http.route('/social/len', type='json', auth='user', cors='*', method=['POST'])
-    def social_len(self, **kw):
-        return json.dumps({})
 
     @http.route('/social/info', type='json', auth='user', cors='*', method=['POST'])
     def social(self,*kw):
         social = []
+        # Note: Lần sau nên để các trường One2Many và Many2Many vó hậu tố là "_ids" (vd: facebook_ids)
         for facebook in request.env.user.facebook_id:
             insta = facebook.instagram_user_id
             social.append({
@@ -20,6 +18,7 @@ class SocialController(http.Controller):
                 'username':insta.username,
                 'profile_img':insta.profile_img
             })
+        # Note: Lần sau nên để các trường One2Many và Many2Many vó hậu tố là "_ids" (vd: facebook_ids)
         for tiktok in request.env.user.tiktok_id:
             social.append({
                 'id':tiktok.id,
@@ -77,11 +76,13 @@ class SocialController(http.Controller):
 
     @http.route('/media_source/remove', type='json', auth='user', cors='*', method=['POST'])
     def remove_media_source(self, **kw):
+        # Todo: Check media source thuộc sở hữu của người dùng thì mới cho xóa
         media_source = request.env['media.source'].sudo().browse(kw['media_source_id'])
         media_source.sudo().unlink()
 
     @http.route('/media_source/posts', type='json', auth='user', cors='*', method=['POST'])
     def media_source_products(self, **kw):
+        # Todo: Check media source thuộc sở hữu của người dùng thì mới cho search
         media_source = request.env['media.source'].sudo().browse(kw['media_source_id'])
         selected_post = json.loads(media_source['selected_post_ids'])
         post_list= {
@@ -124,8 +125,10 @@ class SocialController(http.Controller):
 
         return json.dumps(post_list)
 
+    # Todo: Gộp hàm hide và show lại thành một hàm
     @http.route('/media_source/posts/hide', type='json', auth='user', cors='*', method=['POST'])
     def hide_posts_media_source(self, **kw):
+        # Todo: Check media source thuộc sở hữu của người dùng thì mới cho search
         media_source = request.env['media.source'].sudo().browse(kw['media_source_id'])
         selected_post_ids = json.loads(media_source['selected_post_ids'])
         for post_id in kw['selected_post']:
@@ -138,6 +141,7 @@ class SocialController(http.Controller):
 
     @http.route('/media_source/posts/show', type='json', auth='user', cors='*', method=['POST'])
     def show_posts_media_source(self, **kw):
+        # Todo: Check media source thuộc sở hữu của người dùng thì mới cho search
         media_source = request.env['media.source'].sudo().browse(kw['media_source_id'])
         selected_post_ids = json.loads(media_source['selected_post_ids'])
         for post_id in kw['selected_post']:
@@ -149,6 +153,7 @@ class SocialController(http.Controller):
 
     @http.route('/media_source/hotspot', type='json', auth='user', cors='*', method=['POST'])
     def make_hotspot(self,**kw):
+        # Todo: Lưu ý việc đặt tên field nên rõ ràng hơn
         product = request.env['shopify.hotspot'].sudo().search([('shopify_id','=',kw['product_choosen'])])
         if not product:
             product = request.env['shopify.hotspot'].sudo().create({
@@ -201,6 +206,7 @@ class SocialController(http.Controller):
 
     @http.route('/media_source/hotspot/products_choosen', type='json', auth='public', cors='*', method=['POST'])
     def get_product_choosen(self,**kw):
+        # Todo: Check media source thuộc sở hữu của người dùng thì mới cho search
         product_choosen = []
         if kw['platform'] == 'tiktok':
             post = request.env['tiktok.post'].sudo().search([('id','=',kw['post_id'])])
@@ -224,6 +230,8 @@ class SocialController(http.Controller):
 
     @http.route('/media_source/change/<string:attribute>', type='json', auth='user', cors='*', method=['POST'])
     def change_attribute_media_source(self, **kw):
+        # Todo: Check media source thuộc sở hữu của người dùng thì mới cho search
+        # Todo: Check attribute trước khi write
         media_source = request.env['media.source'].sudo().browse(kw['media_source_id'])
         media_source.write({
             kw['attribute']:kw[kw['attribute']]
@@ -259,11 +267,13 @@ class SocialController(http.Controller):
 
     @http.route('/feed/remove', type='json', auth='user', cors='*', method=['POST'])
     def remove_feed(self,**kw):
+        # Todo: Check feed thuộc sở hữu của người dùng thì mới cho xóa
         feed = request.env['social.feed'].sudo().browse(kw['feed_id'])
         feed.unlink()
 
     @http.route('/feed/posts', type="json", auth='public', crsf=False, cors='*', method=['POST'])
     def get_feed_posts(self, **kw):
+        # Todo: Check thuộc sở hữu của người dùng thì mới cho search
         feed_posts = {
             'posts':[],
             'setting':{}
@@ -315,6 +325,8 @@ class SocialController(http.Controller):
 
     @http.route('/feed/change/<string:attribute>', type='json', auth='user', cors='*', method=['POST'])
     def change_attribute_feed(self, **kw):
+        # Todo: Check thuộc sở hữu của người dùng thì mới cho search
+        # Todo: Check attribute trước khi write
         feed = request.env['social.feed'].sudo().search([('id','=',kw['feed_id'])],limit=1)
         feed.write({
             kw['attribute']: kw[kw['attribute']]
