@@ -3,6 +3,7 @@ import werkzeug
 
 from odoo import http
 from odoo.http import request
+from ..instance.InstagramAPI import InstagramAPI
 
 SCOPE = 'pages_show_list,instagram_basic,pages_manage_engagement,business_management,pages_messaging'
 
@@ -11,7 +12,6 @@ class FacebookController(http.Controller):
     def meta_auth(self):
         facebook_client_id = request.env['ir.config_parameter'].sudo().get_param('instafeed.facebook_client_id')
         facebook_redirect_uri = request.env['ir.config_parameter'].sudo().get_param('instafeed.facebook_redirect_uri')
-        facebook_secret = request.env['ir.config_parameter'].sudo().get_param('instafeed.facebook_secret')
 
         return werkzeug.utils.redirect(f'https://www.facebook.com/v17.0/dialog/oauth?client_id={facebook_client_id}&redirect_uri={facebook_redirect_uri}&scope={SCOPE}')
 
@@ -22,21 +22,15 @@ class FacebookController(http.Controller):
         facebook_redirect_uri = request.env['ir.config_parameter'].sudo().get_param('instafeed.facebook_redirect_uri')
         facebook_secret = request.env['ir.config_parameter'].sudo().get_param('instafeed.facebook_secret')
 
-        get_token_uri = ('https://graph.facebook.com/v17.0/oauth/access_token')
-        get_token_param = {
-            'redirect_uri' :facebook_redirect_uri,
-            'client_id': facebook_client_id,
-            'client_secret': facebook_secret,
-            'code' : kw['code']
-        }
+        instagram = InstagramAPI(request)
 
-        facebook_token_data = requests.post(get_token_uri, get_token_param)
+        facebook_token_data = instagram.get_user_token_facebook(kw['code'])
         facebook_token = facebook_token_data.json()['access_token']
 
-        app_access_token_data = requests.get(f'https://graph.facebook.com/oauth/access_token?client_id={facebook_client_id}&client_secret={facebook_secret}&grant_type=client_credentials')
+        app_access_token_data = instagram.get_app_token_facebook()
         app_access_token = app_access_token_data.json()['access_token']
 
-        facebook_user_data = requests.get(f'https://graph.facebook.com/debug_token?input_token={facebook_token}&access_token={app_access_token}')
+        facebook_user_data = instagram.get_facebook_user_data(facebook_token,app_access_token)
         facebook_user = facebook_user_data.json()['data']
 
         current_facebook_user = request.env['facebook.user'].sudo().search([('user_id','=',facebook_user['user_id'])])

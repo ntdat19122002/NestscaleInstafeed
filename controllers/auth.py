@@ -38,7 +38,7 @@ class AuthShopifyController(http.Controller):
                 # Todo: tạo state từ việc hash secret key với tên shop👌
                 # Reply: state dùng để tránh lỗi CSRF (tấn công giả mạo), odoo đã có sãn hàm tạo CSRF token từ session
                 # time_limit (Nếu có) và database.secret
-                state = request.csrf_token
+                state = request.csrf_token.decode('utf-8')
                 redirect_uri = request.env['ir.config_parameter'].sudo().get_param('web.base.url') + "/shopify/instafeed/finalize"
                 scopes = [
                     "read_products",
@@ -61,7 +61,7 @@ class AuthShopifyController(http.Controller):
     def shopify_callback(self, **kw):
         try:
             # Todo: Check state 👌
-            if kw['state'] == request.csrf_token:
+            if kw['state'] == request.csrf_token.decode('utf-8'):
                 if 'shop' in request.params:
                     api_version = request.env['ir.config_parameter'].sudo().get_param('instafeed.shopify_api_version')
                     shopify_key = request.env['ir.config_parameter'].sudo().get_param('instafeed.shopify_key')
