@@ -1,6 +1,5 @@
 import requests
 
-SCOPE = 'pages_show_list,instagram_basic,pages_manage_engagement,business_management,pages_messaging'
 class InstagramAPI(object):
     facebook_client_id = None
     facebook_redirect_uri = None
@@ -33,3 +32,15 @@ class InstagramAPI(object):
 
     def get_facebook_user_data(self,access_token,app_access_token):
         return requests.get(f'https://graph.facebook.com/debug_token?input_token={access_token}&access_token={app_access_token}')
+
+    def get_page_data_facebook(self,access_token):
+        return requests.get(f"https://graph.facebook.com/me/accounts?access_token={access_token}")
+
+    def get_insta_data(self,page_id,access_token):
+        return requests.get(f"https://graph.facebook.com/v17.0/{page_id}?fields=instagram_business_account&access_token={access_token}")
+
+    def get_user_insta_data(self,insta_id,access_token):
+        return requests.get(f"https://graph.facebook.com/v17.0/{insta_id}?fields=name,profile_picture_url&access_token={access_token}")
+
+    def get_insta_media_data(self,insta_id,fields,access_token):
+        return requests.get(f"https://graph.facebook.com/v17.0/{insta_id}/media?fields={fields}&access_token={access_token}")

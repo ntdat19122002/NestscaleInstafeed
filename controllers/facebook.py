@@ -18,10 +18,6 @@ class FacebookController(http.Controller):
 
     @http.route('/facebook/instafeed/oauth', auth='public')
     def meta_callback(self,**kw):
-        facebook_client_id = request.env['ir.config_parameter'].sudo().get_param('instafeed.facebook_client_id')
-        facebook_redirect_uri = request.env['ir.config_parameter'].sudo().get_param('instafeed.facebook_redirect_uri')
-        facebook_secret = request.env['ir.config_parameter'].sudo().get_param('instafeed.facebook_secret')
-
         instagram = InstagramAPI(request)
 
         facebook_token_data = instagram.get_user_token_facebook(kw['code'])
@@ -52,13 +48,13 @@ class FacebookController(http.Controller):
             })
             facebook_new_id = current_facebook_user.id
 
-        page_data = requests.get(f"https://graph.facebook.com/me/accounts?access_token={facebook_token}").json()
-        page_data_id = page_data['data'][0]['id']
+        page_data = instagram.get_page_data_facebook(facebook_token)
+        page_data_id = page_data.json()['data'][0]['id']
 
-        get_id_insta_data = requests.get(f"https://graph.facebook.com/v17.0/{page_data_id}?fields=instagram_business_account&access_token={facebook_token}").json()
-        insta_id = get_id_insta_data["instagram_business_account"]['id']
+        insta_data = instagram.get_insta_data(page_data_id,facebook_token)
+        insta_id = insta_data.json()["instagram_business_account"]['id']
 
-        user_insta_data =  requests.get(f"https://graph.facebook.com/v17.0/{insta_id}?fields=name,profile_picture_url&access_token={facebook_token}").json()
+        user_insta_data =  instagram.get_user_insta_data(insta_id,facebook_token).json()
 
         insta_user = request.env['instagram.user'].sudo().search([('instagram_id','=',insta_id)],limit=1)
         if not insta_user:
@@ -83,9 +79,9 @@ class FacebookController(http.Controller):
                 'instagram_user_id': insta_user.id
             })
 
-        insta_data_fields = 'media_url,permalink,media_type,thumbnail_url'
-        insta_data = requests.get(f"https://graph.facebook.com/v17.0/{insta_id}/media?fields={insta_data_fields}&access_token={facebook_token}").json()
-        for post in insta_data['data']:
+        insta_media_fields = 'media_url,permalink,media_type,thumbnail_url'
+        insta_media_data = instagram.get_insta_media_data(insta_id,insta_media_fields,facebook_token).json()
+        for post in insta_media_data['data']:
             post_search = request.env['instagram.post'].sudo().search([('post_id','=',post['id'])],limit=1)
             if not post_search:
                 post_search = request.env['instagram.post'].sudo().create({

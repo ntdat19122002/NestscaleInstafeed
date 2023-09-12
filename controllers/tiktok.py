@@ -6,6 +6,7 @@ import werkzeug
 
 from odoo import http
 from odoo.http import request
+from ..instance.TiktokAPI import TiktokAPI
 
 class TiktokController(http.Controller):
     @http.route('/tiktok/instafeed/auth', auth='public')
@@ -28,16 +29,10 @@ class TiktokController(http.Controller):
     def tiktok_finalize(self,**kw):
         tiktok_client_key = request.env['ir.config_parameter'].sudo().get_param('instafeed.tiktok_client_key')
         tiktok_secret_key = request.env['ir.config_parameter'].sudo().get_param('instafeed.tiktok_secret_key')
-
+        tiktok = TiktokAPI(request)
         if 'code' in kw:
-            get_token_uri = 'https://open-api.tiktok.com/oauth/access_token/'
-            get_token_param = {
-                'client_key':tiktok_client_key,
-                'client_secret':tiktok_secret_key,
-                'code': kw['code'],
-                'grant_type': 'authorization_code'
-            }
-            token = requests.post(get_token_uri,get_token_param).json()['data']['access_token']
+
+            token = tiktok.get_tiktok_access_token(kw['code']).json()['data']['access_token']
 
             user_info_uri = 'https://open-api.tiktok.com/user/info/'
             user_info_param = {
