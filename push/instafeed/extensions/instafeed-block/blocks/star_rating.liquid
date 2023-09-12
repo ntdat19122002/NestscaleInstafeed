@@ -1,3 +1,11 @@
+<style>
+  .flex{
+    display: flex;
+  }
+  iframe{
+    width: 100%;
+  }
+</style>
 <div class="app-shopify-id" feed_id="{{ block.settings.feed_id }}"></div>
 <script>
   if(!document.getElementById('instafeed_block_id')){
@@ -6,7 +14,7 @@
     document.getElementsByTagName('head')[0].appendChild(script)
   }
 </script>
-
+<script src="https://kit.fontawesome.com/3ec5aa8ff1.js" crossorigin="anonymous"></script>
 {% schema %}
 {
   "name": "Instafeed",

@@ -9,6 +9,7 @@ import Analytics from '../views/Analytics.vue'
 import MediaSource from '../views/MediaSource.vue'
 import MediaSourceCreate from '../views/MediaSourceCreate.vue'
 import MediaSourceDetail from '../views/MediaSourceDetail.vue'
+import TestShopify from '../views/TestShopify.vue'
 import paths from  './paths'
 
 const router = createRouter({
@@ -63,6 +64,11 @@ const router = createRouter({
       path: paths.Analytics,
       name: 'Analytics',
       component: Analytics
+    },
+    {
+      path: paths.TestShopify,
+      name: 'TestShopify',
+      component: TestShopify
     }
   ]
 })

@@ -29,7 +29,7 @@ class InstaFeed(models.Model):
 
     title = fields.Char()
 
-    feed_id = fields.Char(compute='_hash_feed')
+    feed_id = fields.Char()
     media_items = fields.Integer(compute='_compute_number_of_media_items')
 
     post_spacing = fields.Integer(default = 0)
@@ -48,9 +48,3 @@ class InstaFeed(models.Model):
             for media_source in rec.media_source_ids:
                 number_of_media_items += len(json.loads(media_source['selected_post_ids']))
             rec.media_items = number_of_media_items
-
-    def _hash_feed(self):
-        for rec in self:
-            rec.feed_id = hash(json.dumps({
-                'id':rec.id,
-            }))

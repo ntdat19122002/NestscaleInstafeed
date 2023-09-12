@@ -9,6 +9,7 @@ const paths = {
     'MediaSourceDetail': '/apps/instafeed/media_source/:id',
     'MediaSourceCreate': '/apps/instafeed/media_source/create',
     'Analytics': '/apps/instafeed/analytics',
+    'TestShopify': '/apps/instafeed/test_shopify',
 }
 
 export default paths

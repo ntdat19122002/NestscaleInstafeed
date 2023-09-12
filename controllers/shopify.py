@@ -7,7 +7,7 @@ from odoo.http import request
 
 
 class ShopifyController(http.Controller):
-    @http.route('/shopify/products', type="json", auth='user', cors='*', method=['POST'])
+    @http.route('/shopify/products', type="json", auth='public', cors='*', method=['POST'])
     def get_products_shopify(self, **kw):
         shop = request.env['shopify.shop'].sudo().search([('user_id','=',request.env.user.id)])
         shop.init_shopify_session()

@@ -1,4 +1,5 @@
 import json
+import sys
 
 from odoo import http
 from odoo.http import request
@@ -198,7 +199,7 @@ class SocialController(http.Controller):
                 'hotspot_ids': [(2, product.id)]
             })
 
-    @http.route('/media_source/hotspot/products_choosen', type='json', auth='user', cors='*', method=['POST'])
+    @http.route('/media_source/hotspot/products_choosen', type='json', auth='public', cors='*', method=['POST'])
     def get_product_choosen(self,**kw):
         product_choosen = []
         if kw['platform'] == 'tiktok':
@@ -234,6 +235,10 @@ class SocialController(http.Controller):
             'title':kw['feed_name'],
             'media_source_ids':[(6,0,kw['media_source_ids'])]
         })
+        feed_id = hash(feed_created) % ((sys.maxsize + 1) * 2)
+        feed_created.write({
+            'feed_id':feed_id
+        })
         return json.dumps({
             'feed_id':feed_created.id
         })
@@ -257,14 +262,14 @@ class SocialController(http.Controller):
         feed = request.env['social.feed'].sudo().browse(kw['feed_id'])
         feed.unlink()
 
-    @http.route('/feed/posts', type="json", auth='none', crsf=False, cors='*', method=['POST'])
+    @http.route('/feed/posts', type="json", auth='public', crsf=False, cors='*', method=['POST'])
     def get_feed_posts(self, **kw):
         feed_posts = {
             'posts':[],
             'setting':{}
         }
         if 'hash_feed_id' in kw:
-            feed = request.env['social.feed'].sudo().search([('feed_id', '=', kw['hash_feed_id'])], limit=1)
+            feed = request.env['social.feed'].sudo().search([('feed_id', '=', kw['hash_feed_id'])])
         else:
             feed = request.env['social.feed'].sudo().search([('id','=',kw['feed_id'])],limit=1)
         media_sources = feed['media_source_ids']

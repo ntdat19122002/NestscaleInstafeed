@@ -94,12 +94,12 @@ class TiktokController(http.Controller):
                         })
         return werkzeug.utils.redirect('https://odoo.website/')
 
-    @http.route('/tiktok/like', type="json", auth='user', cors='*', method=['POST'])
+    @http.route('/tiktok/like', type="json", auth='public', cors='*', method=['POST'])
     def get_number_of_like_tiktok(self, **kw):
         post = request.env['tiktok.post'].sudo().search([('id', '=', kw['post_id'])])
         return json.dumps(post.like_count)
 
-    @http.route('/tiktok/comments', type="json", auth='user', cors='*', method=['POST'])
+    @http.route('/tiktok/comments', type="json", auth='public', cors='*', method=['POST'])
     def get_number_of_comments_tiktok(self, **kw):
         post = request.env['tiktok.post'].sudo().search([('id', '=', kw['post_id'])])
         return json.dumps(post.comment_count)

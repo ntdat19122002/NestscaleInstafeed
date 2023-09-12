@@ -1,5 +1,8 @@
 <template>
   <div class="feed">
+    <router-link :to="{name:'Feed'}" class="back">
+      &lt;
+    </router-link>
     <div class="customize">
       <div class="title">Customize</div>
       <div class="input-row">

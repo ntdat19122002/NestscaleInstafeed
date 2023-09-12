@@ -1,6 +1,5 @@
 <template>
   <div class="feed-shopify">
-    Hello, this is feed shopify
     <FeedComponent :posts="posts" :feed_setting="feed_setting"/>
   </div>
 </template>
@@ -40,6 +39,8 @@ export default {
     }).catch(e=>{
       console.log(e)
     })
+
+    window.app_settings='abc'
   }
 }
 </script>

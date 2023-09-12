@@ -21,8 +21,8 @@
           </div>
           <div class="modal-product">
             <div class="modal-header">
-              <img v-if="platform == 'instagram'" src="/instafeed/static/images/logo/ins.png">
-              <img v-if="platform == 'tiktok'" src="/instafeed/static/images/logo/tiktok.png">
+              <img v-if="platform == 'instagram'" src="https://odoo.website/instafeed/static/images/logo/ins.png">
+              <img v-if="platform == 'tiktok'" src="https://odoo.website/instafeed/static/images/logo/tiktok.png">
               <span>{{ insta_name }}</span>
             </div>
 
@@ -112,7 +112,7 @@ export default {
     },
     search_products: debounce(function () {
       let self = this
-      axios.post('/shopify/products', {
+      axios.post(this.get_link_axios+'/shopify/products', {
         jsonrpc: 2.0,
         params: {
           product_search: self.product_search
@@ -154,14 +154,14 @@ export default {
     },
     watch_like() {
       if (this.platform == 'instagram'){
-        axios.post('/instagram/like', {
+        axios.post(this.get_link_axios+'/instagram/like', {
           jsonrpc: 2.0,
           params: {
             post_id: this.post.post_id
           }
         }).then(res => this.number_of_likes = JSON.parse(res.data.result))
       }else if (this.platform == 'tiktok'){
-        axios.post('/tiktok/like', {
+        axios.post(this.get_link_axios+'/tiktok/like', {
           jsonrpc: 2.0,
           params: {
             post_id: this.post.post_id
@@ -171,14 +171,14 @@ export default {
     },
     watch_comments() {
       if (this.platform == 'instagram') {
-        axios.post('/instagram/comments', {
+        axios.post(this.get_link_axios+'/instagram/comments', {
           jsonrpc: 2.0,
           params: {
             post_id: this.post.post_id
           }
         }).then(res => this.number_of_comments = JSON.parse(res.data.result))
       }else if (this.platform == 'tiktok'){
-         axios.post('/tiktok/comments', {
+         axios.post(this.get_link_axios+'/tiktok/comments', {
           jsonrpc: 2.0,
           params: {
             post_id: this.post.post_id
@@ -192,6 +192,13 @@ export default {
     },
   },
   computed: {
+    get_link_axios(){
+      if(window.location.hostname == 'odoo.website'){
+        return ''
+      }else{
+        return '/apps/instafeed'
+      }
+    },
     get_background_url() {
       if (this.post.media_type == 'VIDEO') {
         return this.post.thumbnail_url
@@ -219,7 +226,7 @@ export default {
     }
   },
   mounted() {
-    axios.post('/shopify/products', {
+    axios.post(this.get_link_axios+'/shopify/products', {
       jsonrpc: 2.0,
       params: {
         product_search: this.product_search
@@ -233,7 +240,7 @@ export default {
     }
 
     // Get list of choosen product
-    axios.post('/media_source/hotspot/products_choosen', {
+    axios.post(this.get_link_axios+'/media_source/hotspot/products_choosen', {
       jsonrpc: 2.0,
       params: {
         post_id: this.post.post_id,
