@@ -36,6 +36,9 @@
 
             <div class="product-list">
               <button v-if="customize_hotspot" @click="tag_products">Tag products</button>
+              <select v-model="shop_choosen" v-if="customize_hotspot">
+                <option :value="shop.name" v-for="shop in shops">{{shop.name}}</option>
+              </select>
               <!--Fetch dữ liệu product từ store mỗi khi ấn tag product 👌-->
 
               <!--Bắt đầu: Danh sách các sản phẩm được chọn-->
@@ -88,6 +91,8 @@ export default {
   props: ['post', 'click_type', 'show_like', 'show_comment', 'platform', 'customize_hotspot'],
   data() {
     return {
+      shops:[],
+      shop_choosen:'',
       post_hover: false,
       post_modal: false,
       product_modal: false,
@@ -106,6 +111,7 @@ export default {
       axios.post('/shopify/products', {
         jsonrpc: 2.0,
         params: {
+          shop_choosen:this.shop_choosen,
           product_search: this.product_search
         }
       }).then(res => this.products_list = JSON.parse(res.data.result))
@@ -115,6 +121,7 @@ export default {
       axios.post(this.get_link_axios+'/shopify/products', {
         jsonrpc: 2.0,
         params: {
+          shop_choosen:self.shop_choosen,
           product_search: self.product_search
         }
       }).then(res => self.products_list = JSON.parse(res.data.result))
@@ -225,10 +232,18 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
+    await axios.get('https://odoo.website/api/integrate/ui')
+      .then(response => {
+        this.shops = response.data
+        this.shop_choosen = this.shops[0].name
+      })
+      .catch(err => console.log(err))
+
     axios.post(this.get_link_axios+'/shopify/products', {
       jsonrpc: 2.0,
       params: {
+        shop_choosen:this.shop_choosen,
         product_search: this.product_search
       }
     }).then(res => this.products_list = JSON.parse(res.data.result))
@@ -323,6 +338,11 @@ img {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.product-list select{
+  margin: 0 auto;
+  display: block;
 }
 
 .product-row {

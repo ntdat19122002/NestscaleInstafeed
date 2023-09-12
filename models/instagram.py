@@ -6,6 +6,7 @@ from odoo import fields, api, models
 class InstaUser(models.Model):
     _name = "instagram.user"
 
+    admin = fields.Many2one('res.user')
     instagram_id = fields.Char()
     profile_img = fields.Char()
     username = fields.Char()
@@ -15,6 +16,7 @@ class InstaUser(models.Model):
 class InstaPost(models.Model):
     _name = 'instagram.post'
 
+    admin = fields.Many2one('res.user')
     post_id = fields.Char()
     link_to_post = fields.Char()
     media_type = fields.Char()

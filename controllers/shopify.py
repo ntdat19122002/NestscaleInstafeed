@@ -9,8 +9,9 @@ from odoo.http import request
 class ShopifyController(http.Controller):
     @http.route('/shopify/products', type="json", auth='public', cors='*', method=['POST'])
     def get_products_shopify(self, **kw):
-        # Todo: Sửa lại tìm kiếm sản phẩm theo shop. Hiện nay đang search ra nhiều shop
-        shop = request.env['shopify.shop'].sudo().search([('user_id','=',request.env.user.id)])
+        # Todo: Sửa lại tìm kiếm sản phẩm theo shop. Hiện nay đang search ra nhiều shop 👌
+        shop = request.env['shopify.shop'].sudo().search([('user_id', '=', request.env.user.id),
+                                                          ('shop_url', '=', kw['shop_choosen'])])
         shop.init_shopify_session()
         if not kw['product_search']:
             products_list_graph_data = json.loads(shopify.GraphQL().execute('''
@@ -44,7 +45,7 @@ class ShopifyController(http.Controller):
                         shop{
                             name
                         }
-                        products(first:20,query:"title:*'''+kw['product_search']+'''*"){
+                        products(first:20,query:"title:*''' + kw['product_search'] + '''*"){
                             edges{
                                 node{
                                     id
@@ -65,20 +66,20 @@ class ShopifyController(http.Controller):
                 '''))
         products_list_data = []
         for product in products_list_graph_data['data']['products']['edges']:
-            if len(product['node']['images']['edges'])>0:
+            if len(product['node']['images']['edges']) > 0:
                 products_list_data.append({
                     'shopify_shop': products_list_graph_data['data']['shop']['name'],
-                    'shopify_id':product['node']['id'],
-                    'title':product['node']['title'],
-                    'description':product['node']['description'],
-                    'img':product['node']['images']['edges'][0]['node']['originalSrc']
+                    'shopify_id': product['node']['id'],
+                    'title': product['node']['title'],
+                    'description': product['node']['description'],
+                    'img': product['node']['images']['edges'][0]['node']['originalSrc']
                 })
         return (json.dumps(products_list_data))
 
     # integrate
     @http.route('/api/integrate/ui', auth='user', cors='*', method=['POST'])
     def integrate_shop_ui(self):
-        shops = request.env['shopify.shop'].sudo().search([('user_id','=',request.env.user.id)])
+        shops = request.env['shopify.shop'].sudo().search([('user_id', '=', request.env.user.id)])
         shops_data = []
         for shop in shops:
             shops_data.append({
@@ -86,26 +87,27 @@ class ShopifyController(http.Controller):
             })
         return json.dumps(shops_data)
 
-    # Todo: Bỏ feature này. Muốn integration thì phải thông qua hàm authorize
-    @http.route('/api/integrate', type='json', auth='user', cors='*', method=['POST'])
-    def integrate_shop(self, **kw):
-        shop = request.env['shopify.shop'].sudo().search([('shop_url', '=', kw['url'])])
-        if shop:
-            if not shop['user_id']:
-                shop.write(
-                    {
-                        'user_id': request.env.user.id
-                    }
-                )
+    # Todo: Bỏ feature này. Muốn integration thì phải thông qua hàm authorize 👌
 
-    # Todo: Bỏ feature này. Muốn biết chi tiết thì hỏi anh Hải
-    @http.route('/api/disintegrate', type='json', auth='user', cors='*', method=['POST'])
-    def disintegrate_shop(self, **kw):
-        shop = request.env['shopify.shop'].sudo().search([('shop_url', '=', kw['url'])])
-        if shop:
-            if shop['user_id']:
-                shop.sudo().write(
-                    {
-                        'user_id': False
-                    }
-                )
+    # @http.route('/api/integrate', type='json', auth='user', cors='*', method=['POST'])
+    # def integrate_shop(self, **kw):
+    #     shop = request.env['shopify.shop'].sudo().search([('shop_url', '=', kw['url'])])
+    #     if shop:
+    #         if not shop['user_id']:
+    #             shop.write(
+    #                 {
+    #                     'user_id': request.env.user.id
+    #                 }
+    #             )
+
+    # Todo: Bỏ feature này. Muốn biết chi tiết thì hỏi anh Hải 👌
+    # @http.route('/api/disintegrate', type='json', auth='user', cors='*', method=['POST'])
+    # def disintegrate_shop(self, **kw):
+    #     shop = request.env['shopify.shop'].sudo().search([('shop_url', '=', kw['url'])])
+    #     if shop:
+    #         if shop['user_id']:
+    #             shop.sudo().write(
+    #                 {
+    #                     'user_id': False
+    #                 }
+    #             )

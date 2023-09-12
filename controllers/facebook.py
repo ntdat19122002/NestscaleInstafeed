@@ -59,6 +59,7 @@ class FacebookController(http.Controller):
         insta_user = request.env['instagram.user'].sudo().search([('instagram_id','=',insta_id)],limit=1)
         if not insta_user:
             insta_user = request.env['instagram.user'].sudo().create({
+                'admin': request.env.user.id,
                 'instagram_id':insta_id,
                 'facebook_id':facebook_new_id,
                 'profile_img':user_insta_data['profile_picture_url'],
@@ -66,6 +67,7 @@ class FacebookController(http.Controller):
             })
 
             current_facebook_user.sudo().write({
+                'admin': request.env.user.id,
                 'instagram_user_id':insta_user.id
             })
         else:
@@ -85,6 +87,7 @@ class FacebookController(http.Controller):
             post_search = request.env['instagram.post'].sudo().search([('post_id','=',post['id'])],limit=1)
             if not post_search:
                 post_search = request.env['instagram.post'].sudo().create({
+                    'admin': request.env.user.id,
                     'post_id':post['id'],
                     'instagram_user_id':insta_user.id,
                     'media_url':post['media_url'],
@@ -93,6 +96,7 @@ class FacebookController(http.Controller):
                 })
             else:
                 post_search.sudo().write({
+                    'admin': request.env.user.id,
                     'instagram_user_id': insta_user.id,
                     'media_url': post['media_url'],
                     'link_to_post': post['permalink'],

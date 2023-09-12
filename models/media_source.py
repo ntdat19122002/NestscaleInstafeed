@@ -4,6 +4,7 @@ class MediaSource(models.Model):
     _name = 'media.source'
 
     name = fields.Char()
+    admin = fields.Many2one('res.users')
     platform = fields.Char()
     instagram_id = fields.Many2one('instagram.user')
     tiktok_id = fields.Many2one('tiktok.user')

@@ -32,6 +32,12 @@ class ShopifyShop(models.Model):
 
         ngrok_address = self.env["ir.config_parameter"].sudo().get_param("instafeed.ngrok_address")
         shopify.Webhook({
+            'topic': "products/update",
+            'address': ngrok_address + f"/webhook/products_update/{self.id}",
+            'format': "json"
+        }).save()
+
+        shopify.Webhook({
             'topic': "app/uninstalled",
             'address': ngrok_address + f"/webhook/uninstall/{self.id}",
             'format': "json"

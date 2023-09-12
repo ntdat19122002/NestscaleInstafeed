@@ -6,23 +6,28 @@ from odoo.http import request
 
 class WebhookController(http.Controller):
     @http.route('/webhook/orders_create/<int:id>',type='json', auth="public")
-    def webhook_check(self,**kw):
+    def webhook_order_create(self,**kw):
         print(kw)
         return {}
     @http.route('/webhook/orders_update/<int:id>',type='json', auth="public")
-    def webhook_check(self,**kw):
+    def webhook_order_update(self,**kw):
         print(kw)
         return {}
     @http.route('/webhook/products_create/<int:id>',type='json', auth="public")
-    def webhook_check(self,**kw):
+    def webhook_product_create(self,**kw):
         print(request.jsonrequest)
         return {}
 
-    #Todo: Viết webhook cập nhật tên sản phẩm.
+    #Todo: Viết webhook cập nhật tên sản phẩm. 👌
     @http.route('/webhook/products_update/<int:id>',type='json', auth="public")
-    def webhook_check(self,**kw):
-        print(request.jsonrequest)
-        return {}
+    def webhook_product_update(self,**kw):
+        product_update = request.jsonrequest
+        hotspot = request.env['shopify.hotspot'].sudo().search([('shopify_id','=',product_update['admin_graphql_api_id'])],limit=1)
+        if hotspot:
+            hotspot.write({
+                'title':product_update['title'],
+                'image_url':product_update['image']['src']
+            })
 
     @http.route('/webhook/uninstall/<int:id>',type='json', auth="public")
     def webhook_check(self,id,**kw):
